@@ -1,29 +1,71 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import ToastConfig from "@/components/toasts/ToastConfig";
+import { getProfile } from "@/services/private/user-services";
+import { authStore } from "@/store/authStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { router, Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
+SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const isAuthenticated = authStore((state) => state.isAuthenticated);
+  const setIsAuthenticated = authStore((state) => state.setIsAuthenticated);
+  const setIsUnAuthenticated = authStore((state) => state.setIsUnAuthenticated);
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  const getUserProfile = async () => {
+    const response = await getProfile();
+    if (response.status === "success") {
+      return response.data;
+    }
     return null;
-  }
+  };
+
+  const getToken = async (): Promise<void> => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        const user = await getUserProfile();
+        if (user) {
+          setIsAuthenticated();
+        } else {
+          setIsUnAuthenticated();
+        }
+      } else {
+        setIsUnAuthenticated();
+      }
+    } catch (e) {
+      console.error("Error fetching token:", e);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated !== undefined) {
+      if (isAuthenticated) {
+        router.replace("/(main)/(tabs)/home");
+      } else {
+        router.replace("/(auth)");
+      }
+      SplashScreen.hideAsync();
+    }
+  }, [isAuthenticated]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(main)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
+      <Toast config={ToastConfig} />
     </ThemeProvider>
   );
 }
