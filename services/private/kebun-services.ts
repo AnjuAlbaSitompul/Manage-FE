@@ -1,3 +1,4 @@
+import { ReportParam } from "@/app/(main)/(tabs)/report/vehicleReport";
 import { KebunCreateType } from "@/models/kebuns/kebunModels";
 import axiosInstance from "@/utils/axiosInstance";
 import { AxiosResponse } from "axios";
@@ -28,4 +29,19 @@ const createKebun = async (
     };
   }
 };
-export { createKebun, getKebuns };
+
+const reportKebun = async (
+  params?: ReportParam
+): Promise<AxiosResponse<responseType<any>> | any> => {
+  try {
+    const response = await axiosInstance.get("/garden/report", { params });
+    return response.data;
+  } catch (e: any) {
+    return {
+      status: "error",
+      message: e.response?.data?.message || "Failed to fetch kebun report",
+    };
+  }
+};
+
+export { createKebun, getKebuns, reportKebun };

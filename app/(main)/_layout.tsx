@@ -16,7 +16,8 @@ const MainLayout = () => {
         screenOptions={{
           headerShown: false,
           drawerPosition: "right",
-          drawerActiveTintColor: colors.primary,
+          drawerActiveBackgroundColor: colors.primary,
+          drawerActiveTintColor: colors.white,
           drawerInactiveTintColor: colors.inactive,
         }}
         drawerContent={(props) => <DrawerContent {...props} />}

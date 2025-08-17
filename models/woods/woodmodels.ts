@@ -1,11 +1,12 @@
 export type WoodModels = {
   createdAt?: string;
   updatedAt?: string;
-  isActive: boolean;
+  isActive?: boolean;
   id: string;
   unit: "KG" | "BATANG" | "KENDARAAN";
   name: string;
   price: string;
+  quantity: number;
 };
 
 export type LogWoodModels<T> = {

@@ -13,4 +13,5 @@ export const colors = {
   transparentBlack: "rgba(0, 0, 0, 0.5)",
   captions: "#8e8e93",
   error: "#c91e1e",
+  warn: "#d3d546ff",
 };

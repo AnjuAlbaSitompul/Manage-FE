@@ -1,5 +1,5 @@
-export const currency = (value: string): string => {
-  const numericValue = parseFloat(value);
+export const currency = (value?: string): string => {
+  const numericValue = parseFloat(value || "0");
   if (isNaN(numericValue)) return "Rp 0";
   if (numericValue === 0) return "Rp 0";
   return (

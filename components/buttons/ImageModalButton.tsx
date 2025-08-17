@@ -12,7 +12,7 @@ import {
 import ImageModal from "../modals/ImageModal";
 
 type ImageModalButtonProps = ViewProps & {
-  imageSource: ImageProps;
+  imageSource: ImageProps["source"];
 };
 
 const ImageModalButton = ({ imageSource, style }: ImageModalButtonProps) => {

@@ -13,7 +13,7 @@ import {
 type FilterButtonProps = {
   data: string[];
   style?: ViewProps["style"];
-  onPress: (item: string) => void;
+  onPress: (item: string | null) => void;
 };
 
 const FilterButton = ({ data, onPress, style }: FilterButtonProps) => {
@@ -22,6 +22,11 @@ const FilterButton = ({ data, onPress, style }: FilterButtonProps) => {
   const onPressHandler = (item: string) => {
     setIsChosen(item);
     onPress(item);
+
+    if (item === isChoosen) {
+      setIsChosen(null);
+      onPress(null);
+    }
   };
   return (
     <ScrollView

@@ -1,6 +1,7 @@
 import { colors } from "@/constants/Colors";
 import { size } from "@/constants/SIze";
 import { signOut } from "@/services/private/auth-services";
+import { authStore } from "@/store/authStore";
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
@@ -13,6 +14,7 @@ import DrawerItem from "./DrawerItem";
 
 const DrawerComponent = (props: DrawerContentComponentProps) => {
   const router = useRouter();
+  const user = authStore((state) => state.user);
   const onLogoutHandler = async (): Promise<void> => {
     const response = await signOut();
     if (response.status === "success") {
@@ -31,9 +33,7 @@ const DrawerComponent = (props: DrawerContentComponentProps) => {
           />
         </View>
         <View style={styles.content}>
-          <View>
-            <DrawerItemList {...props} />
-          </View>
+          <View>{user?.role === "ADMIN" && <DrawerItemList {...props} />}</View>
           <DrawerItem
             text="Sign out"
             name="log-out-outline"

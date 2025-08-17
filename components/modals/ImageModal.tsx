@@ -6,7 +6,7 @@ import IconButtons from "../buttons/IconButtons";
 type ImageModalProps = {
   visible: boolean;
   onRequestClose: () => void;
-  imageSource?: ImageProps;
+  imageSource?: ImageProps["source"];
 };
 
 const ImageModal = ({
@@ -27,7 +27,7 @@ const ImageModal = ({
       <IconButtons
         iconName="close"
         iconSize="xl"
-        iconColor="inactive"
+        iconColor="white"
         style={styles.closeButton}
         onPress={onRequestClose}
       />
@@ -54,9 +54,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   closeButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    zIndex: 1,
+    alignSelf: "flex-end",
   },
 });

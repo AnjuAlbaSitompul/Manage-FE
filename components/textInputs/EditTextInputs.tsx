@@ -7,12 +7,13 @@ import IconButtons from "../buttons/IconButtons";
 import DefaultTextInputs from "./DefaultTextInputs";
 
 type EditTextInputsProps = ViewProps & {
-  value: string;
+  value?: string;
   onChangeText?: (text: string) => void;
   title: string;
   iconName?: keyof typeof Ionicons.glyphMap;
   placeholder?: string;
   onPress?: () => void;
+  editable?: boolean;
 };
 
 const EditTextInputs = ({
@@ -23,6 +24,7 @@ const EditTextInputs = ({
   style,
   placeholder,
   onPress,
+  editable = true,
 }: EditTextInputsProps) => {
   const [edit, setEdit] = useState<boolean>(false);
 
@@ -60,21 +62,23 @@ const EditTextInputs = ({
           </View>
         )}
       </View>
-      <View>
-        {!edit ? (
-          <IconButtons
-            iconName="pencil-outline"
-            onPress={() => setEdit(true)}
-          />
-        ) : (
-          <IconButtons
-            iconName="checkmark-outline"
-            onPress={() => {
-              onDoneEdit();
-            }}
-          />
-        )}
-      </View>
+      {editable && (
+        <View>
+          {!edit ? (
+            <IconButtons
+              iconName="pencil-outline"
+              onPress={() => setEdit(true)}
+            />
+          ) : (
+            <IconButtons
+              iconName="checkmark-outline"
+              onPress={() => {
+                onDoneEdit();
+              }}
+            />
+          )}
+        </View>
+      )}
     </View>
   );
 };
